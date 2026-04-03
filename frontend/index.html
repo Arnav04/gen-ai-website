@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who is Represented in Large Language Models?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Occupations</h2>
+            <p class="subtitle">Make a selection to see the data</p>
+            <div class="occupation-list" id="occupationList">
+                <div class="loading">Loading occupations...</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h1 class="occupation-title" id="occupationTitle">Select an Occupation</h1>
+            <p class="model-info" id="modelInfo">Choose an occupation from the sidebar to begin</p>
+
+            <div class="chart-container" id="chartContainer">
+                <div class="loading">Select an occupation to view charts</div>
+            </div>
+
+            <p class="chart-description">
+                The charts show the percentage-point differences from the National Statistics: negative values indicate 
+                underrepresentation and positive values indicate overrepresentation, with the dashed vertical line marking parity (0).
+            </p>
+
+            <div class="model-selector">
+                <button class="model-btn chatgpt-btn" data-model="openai">
+                    <span class="icon">💬</span> ChatGPT
+                </button>
+                <button class="model-btn gemini-btn" data-model="gemini">
+                    <span class="icon">◆</span> Gemini
+                </button>
+                <button class="model-btn deepseek-btn" data-model="deepseek">
+                    <span class="icon">🔍</span> DeepSeek
+                </button>
+                <button class="model-btn mistral-btn" data-model="mistral">
+                    <span class="icon">Ⓜ</span> Mistral
+                </button>
+                <button class="model-btn all-btn active" data-model="all">
+                    <span class="icon">★</span> All
+                </button>
+            </div>
+        </div>
+
+        <div class="right-sidebar">
+            <div class="sidebar-item active">Results</div>
+            <div class="sidebar-item">Background</div>
+            <div class="sidebar-item">Methods</div>
+            <div class="sidebar-item">The Team</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
