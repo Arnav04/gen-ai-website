@@ -125,6 +125,16 @@ async def root():
         ]
     }
 
+@app.get("/api/debug")
+async def debug():
+    import os
+    return {
+        "cwd": os.getcwd(),
+        "server_file": str(Path(__file__)),
+        "profiles_dir": str(PROFILES_DIR),
+        "profiles_exists": PROFILES_DIR.exists(),
+        "profiles_contents": os.listdir(PROFILES_DIR) if PROFILES_DIR.exists() else "NOT FOUND"
+    }
 
 if __name__ == "__main__":
     import uvicorn
