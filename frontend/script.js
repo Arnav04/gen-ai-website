@@ -1,11 +1,60 @@
 // API Configuration
 const API_BASE_URL = 'https://gen-ai-website-ba85.onrender.com/api';
 
+// Occupation display name mapping
+const occupationNames = {
+    'administrativeassistant': 'Administrative Assistant',
+    'author': 'Author',
+    'bartender': 'Bartender',
+    'biologist': 'Biologist',
+    'buildinginspector': 'Building Inspector',
+    'busdriver': 'Bus Driver',
+    'butcher': 'Butcher',
+    'chef': 'Chef',
+    'chemist': 'Chemist',
+    'chiefexecutiveofficer': 'Chief Executive Officer',
+    'childcareworker': 'Childcare Worker',
+    'computerprogrammer': 'Computer Programmer',
+    'constructionworker': 'Construction Worker',
+    'cook': 'Cook',
+    'craneoperator': 'Crane Operator',
+    'custodian': 'Custodian',
+    'customerservicerepresentative': 'Customer Service Representative',
+    'doctor': 'Doctor',
+    'drafter': 'Drafter',
+    'electrician': 'Electrician',
+    'engineer': 'Engineer',
+    'garbagecollector': 'Garbage Collector',
+    'housekeeper': 'Housekeeper',
+    'insurancesalesagent': 'Insurance Sales Agent',
+    'labtech': 'Lab Tech',
+    'librarian': 'Librarian',
+    'mailcarrier': 'Mail Carrier',
+    'nurse': 'Nurse',
+    'nursepracticoner': 'Nurse Practitioner',
+    'pharmacist': 'Pharmacist',
+    'pilot': 'Pilot',
+    'plumber': 'Plumber',
+    'policeofficer': 'Police Officer',
+    'primaryschoolteacher': 'Primary School Teacher',
+    'receptionist': 'Receptionist',
+    'roofer': 'Roofer',
+    'securityguard': 'Security Guard',
+    'softwaredeveloper': 'Software Developer',
+    'specialedteacher': 'Special Ed Teacher',
+    'truckdriver': 'Truck Driver',
+    'welder': 'Welder',
+};
+
+function formatOccupationName(raw) {
+    return occupationNames[raw.toLowerCase()] || raw;
+}
+
 // State management
 let currentOccupation = null;
 let currentModel = 'all';
 let occupations = [];
-let allDifferences = []; // flat array of {occupation, model_name, diff_p_women, ...}
+let allDifferences = [];
 
 // Model configurations
 const modelConfig = {
@@ -23,7 +72,6 @@ const demographics = [
     { label: 'Asian',    diffKey: 'diff_p_asian'    },
 ];
 
-// Initialize
 async function init() {
     setupEventListeners();
     await loadData();
@@ -52,14 +100,13 @@ async function fetchAPI(endpoint) {
 }
 
 async function loadData() {
-    // Load occupations list and all differences in parallel
     const [occResult, diffResult] = await Promise.all([
         fetchAPI('/occupations'),
         fetchAPI('/differences')
     ]);
 
     if (occResult && occResult.success) {
-        occupations = occResult.data; // array of strings
+        occupations = occResult.data;
         renderOccupationList();
     }
 
@@ -75,7 +122,8 @@ function renderOccupationList() {
     occupations.forEach(name => {
         const btn = document.createElement('button');
         btn.className = 'occupation-btn';
-        btn.textContent = name;
+        btn.textContent = formatOccupationName(name);
+        btn.dataset.rawName = name;
 
         btn.addEventListener('click', () => {
             document.querySelectorAll('.occupation-btn').forEach(b => b.classList.remove('active'));
@@ -89,11 +137,10 @@ function renderOccupationList() {
 
 function selectOccupation(name) {
     currentOccupation = name;
-    document.getElementById('occupationTitle').textContent = name;
+    document.getElementById('occupationTitle').textContent = formatOccupationName(name);
     updateDisplay();
 }
 
-// Get difference rows for current occupation (optionally filtered by model)
 function getRows(occupation, model) {
     return allDifferences.filter(row => {
         const occMatch = row.occupation.toLowerCase() === occupation.toLowerCase();
@@ -121,7 +168,6 @@ function updateModelInfo() {
     const row = rows[0];
     const modelName = modelConfig[currentModel]?.name || currentModel;
 
-    // Find the demographic with the largest absolute deviation
     let maxKey = null, maxVal = 0;
     demographics.forEach(d => {
         const val = parseFloat(row[d.diffKey]);
@@ -133,10 +179,10 @@ function updateModelInfo() {
 
     if (maxKey && Math.abs(maxVal) > 10) {
         const direction = maxVal > 0 ? 'overrepresented' : 'underrepresented';
-        modelInfo.textContent = `${modelName} ${direction} ${maxKey} by ${Math.abs(maxVal).toFixed(1)}% in ${currentOccupation}.`;
+        modelInfo.textContent = `${modelName} ${direction} ${maxKey} by ${Math.abs(maxVal).toFixed(1)}% in ${formatOccupationName(currentOccupation)}.`;
         modelInfo.className = 'model-info';
     } else {
-        modelInfo.textContent = `${modelName} results for ${currentOccupation}.`;
+        modelInfo.textContent = `${modelName} results for ${formatOccupationName(currentOccupation)}.`;
         modelInfo.className = 'model-info neutral';
     }
 }
@@ -149,7 +195,6 @@ function updateCharts() {
         createChartRow(container, demo);
     });
 
-    // Axis labels
     const axis = document.createElement('div');
     axis.className = 'chart-axis';
     axis.innerHTML = `
