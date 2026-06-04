@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Methods – Generating the Modal Worker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f5f0;
+      --text: #1a1a1a;
+      --muted: #666;
+      --accent: #c0392b;
+      --card-bg: #fff;
+      --border: #e0ddd8;
+      --nav-bg: #2c2c2c;
+      --nav-active: #fff;
+      --nav-inactive: #aaa;
+      --step-color-1: #3498db;
+      --step-color-2: #8e44ad;
+      --step-color-3: #27ae60;
+      --step-color-4: #e67e22;
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; right: 0;
+      width: 160px;
+      height: 100vh;
+      background: var(--nav-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 48px;
+      gap: 8px;
+      z-index: 100;
+    }
+    nav a {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 12px 16px;
+      color: var(--nav-inactive);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border-radius: 4px;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: #fff; }
+    nav a.active { color: var(--nav-active); }
+
+    main {
+      margin-right: 160px;
+      padding: 64px 72px 80px;
+      max-width: 900px;
+    }
+
+    .page-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 40px;
+    }
+
+    /* ── PIPELINE DIAGRAM ── */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 48px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 24px;
+      overflow-x: auto;
+    }
+    .pipe-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-width: 120px;
+      flex: 1;
+    }
+    .pipe-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #fff;
+      font-weight: 700;
+    }
+    .pipe-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .pipe-sublabel {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .pipe-arrow {
+      font-size: 20px;
+      color: #ccc;
+      flex-shrink: 0;
+      padding: 0 4px;
+      margin-bottom: 28px;
+    }
+
+    /* model logos row */
+    .model-logos {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .model-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      color: #fff;
+    }
+
+    /* ── STEPS ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+    .step {
+      display: flex;
+      gap: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-content h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .step-content p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+    }
+    .step-content .note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* ── WHAT WE MEASURED ── */
+    .measures {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .measure-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .measure-card h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .measure-card h4 .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .measure-card p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* ── MODELS AUDITED ── */
+    .models-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .model-card {
+      flex: 1;
+      min-width: 120px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .model-card .icon { font-size: 24px; margin-bottom: 8px; }
+    .model-card .name { font-size: 13px; font-weight: 700; }
+    .model-card .version { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ── RQs ── */
+    .rqs { display: flex; flex-direction: column; gap: 16px; }
+    .rq {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .rq-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      flex-shrink: 0;
+      margin-top: 2px;
+      min-width: 28px;
+    }
+    .rq p { font-size: 14px; line-height: 1.6; color: #444; }
+
+    .arxiv-link {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .arxiv-link a { color: var(--accent); text-decoration: none; }
+    .arxiv-link a:hover { text-decoration: underline; }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      margin-top: 48px;
+    }
+    h2:first-of-type { margin-top: 0; }
+
+    .pipeline-img {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Results</a>
+  <a href="background.html">Background</a>
+  <a href="methods.html" class="active">Methods</a>
+  <a href="team.html">The Team</a>
+</nav>
+
+<main>
+  <div class="page-label">Methods</div>
+  <h1>How we conducted the audit</h1>
+
+  <!-- Pipeline image if available, else the step diagram -->
+  <img src="assets/model_pipeline-1.png" alt="Model pipeline diagram" class="pipeline-img"
+       onerror="this.style.display='none'; document.getElementById('pipeline-fallback').style.display='flex';" />
+
+  <div class="pipeline" id="pipeline-fallback" style="display:none;">
+    <div class="pipe-step">
+      <div class="pipe-icon" style="background:#3498db;">📝</div>
+      <div class="pipe-label">Prompt</div>
+      <div class="pipe-sublabel">Generate a profile for &lt;CAREER TERM&gt; in the U.S.</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon" style="background:#8e44ad;">🤖</div>
+      <div class="pipe-label">LLM</div>
+      <div class="model-logos">
+        <span class="model-tag" style="background:#10a37f;">GPT-4</span>
+        <span class="model-tag" style="background:#8e44ad;">Gemini</span>
+        <span class="model-tag" style="background:#d97706;">Mistral</span>
+        <span class="model-tag" style="background:#3498db;">DeepSeek</span>
+      </div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon" style="background:#27ae60;">📄</div>
+      <div class="pipe-label">Output</div>
+      <div class="pipe-sublabel">JSON persona with demographics</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-icon" style="background:#e67e22;">📊</div>
+      <div class="pipe-label">Comparison</div>
+      <div class="pipe-sublabel">vs. BLS workforce data</div>
+    </div>
+  </div>
+
+  <h2>Steps</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Chose 41 occupations and a real-world benchmark</h3>
+        <p>Occupations were selected from prior audit studies and matched to U.S. Bureau of Labor Statistics (BLS) 2023 workforce data — the ground truth for what the actual workforce looks like by race and gender.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Prompted four major LLMs with the same request</h3>
+        <p>"Generate a profile for: [job title] in the United States." Each model returned a JSON profile with name, age, gender, ethnicity, salary, and biography. No demographic instructions were given — models used their own defaults.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Generated 10,000 personas per occupation per model</h3>
+        <p>Each request was issued in a separate context window so models couldn't self-correct for balance.</p>
+        <p class="note">DeepSeek was limited to 1,000 per occupation due to API constraints.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Measured how far each model's outputs deviated from BLS</h3>
+        <p>Used logistic regression to separate two types of distortion: a uniform shift (is a group always over- or underrepresented?) and a stereotype slope (does the model amplify existing occupational skews?)</p>
+        <p class="note">We share more details on our analysis in the <a href="https://arxiv.org/abs/2510.21011" target="_blank" style="color:var(--accent);">paper on arXiv →</a></p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Models audited</h2>
+  <div class="models-row">
+    <div class="model-card">
+      <div class="icon">💬</div>
+      <div class="name">GPT-4</div>
+      <div class="version">OpenAI</div>
+    </div>
+    <div class="model-card">
+      <div class="icon">◆</div>
+      <div class="name">Gemini 2.5</div>
+      <div class="version">Google</div>
+    </div>
+    <div class="model-card">
+      <div class="icon">🔍</div>
+      <div class="name">DeepSeek V3.1</div>
+      <div class="version">DeepSeek</div>
+    </div>
+    <div class="model-card">
+      <div class="icon">Ⓜ</div>
+      <div class="name">Mistral Medium</div>
+      <div class="version">Mistral AI</div>
+    </div>
+  </div>
+
+  <h2>What we measured</h2>
+  <div class="measures">
+    <div class="measure-card">
+      <h4><span class="dot"></span>Gender</h4>
+      <p>Binary male/female representation compared to BLS workforce percentages for each occupation.</p>
+    </div>
+    <div class="measure-card">
+      <h4><span class="dot"></span>Race &amp; Ethnicity</h4>
+      <p>White, Black, Hispanic, and Asian representation compared to BLS data per occupation.</p>
+    </div>
+    <div class="measure-card">
+      <h4><span class="dot"></span>Uniform Shift</h4>
+      <p>Is a demographic group consistently over- or underrepresented regardless of occupation?</p>
+    </div>
+    <div class="measure-card">
+      <h4><span class="dot"></span>Stereotype Slope</h4>
+      <p>Does the model amplify existing occupational demographic skews, making stereotyped roles even more skewed?</p>
+    </div>
+  </div>
+
+  <h2>Research questions</h2>
+  <div class="rqs">
+    <div class="rq">
+      <div class="rq-label">RQ1</div>
+      <p>How do AI-generated personas systematically differ from real U.S. workforce demographics?</p>
+    </div>
+    <div class="rq">
+      <div class="rq-label">RQ2</div>
+      <p>Do models amplify existing occupational stereotypes, or dampen them?</p>
+    </div>
+    <div class="rq">
+      <div class="rq-label">RQ3</div>
+      <p>Do bias patterns differ across models from different countries and organizations — or are they shared?</p>
+    </div>
+  </div>
+
+  <p class="arxiv-link">Full methodology and statistical analysis: <a href="https://arxiv.org/abs/2510.21011" target="_blank">arXiv:2510.21011 →</a></p>
+</main>
+
+</body>
+</html>

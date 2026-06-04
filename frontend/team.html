@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Team – Generating the Modal Worker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f5f0;
+      --text: #1a1a1a;
+      --muted: #666;
+      --accent: #c0392b;
+      --card-bg: #fff;
+      --border: #e0ddd8;
+      --nav-bg: #2c2c2c;
+      --nav-active: #fff;
+      --nav-inactive: #aaa;
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; right: 0;
+      width: 160px;
+      height: 100vh;
+      background: var(--nav-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 48px;
+      gap: 8px;
+      z-index: 100;
+    }
+    nav a {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 12px 16px;
+      color: var(--nav-inactive);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border-radius: 4px;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: #fff; }
+    nav a.active { color: var(--nav-active); }
+
+    main {
+      margin-right: 160px;
+      padding: 64px 72px 80px;
+      max-width: 960px;
+    }
+
+    .page-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 40px;
+    }
+
+    /* ── LAYOUT: logo + acknowledgment side by side ── */
+    .top-section {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-bottom: 56px;
+    }
+    .hci-logo img {
+      height: 80px;
+      display: block;
+    }
+    .hci-logo .logo-placeholder {
+      height: 80px;
+      width: 200px;
+      background: #e8e4dc;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .acknowledgment {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #555;
+      border-left: 3px solid var(--border);
+      padding-left: 20px;
+    }
+    .acknowledgment strong { color: var(--text); }
+
+    /* ── TEAM GRID ── */
+    .team-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .team-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .team-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      background: #e8e4dc;
+      display: block;
+    }
+    .team-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #e8e4dc 0%, #d8d2c8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .team-photo-placeholder svg {
+      width: 48px; height: 48px;
+      opacity: 0.35;
+    }
+    .team-info {
+      padding: 16px 12px 18px;
+    }
+    .team-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 3px;
+      line-height: 1.2;
+    }
+    .team-role {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .team-links {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .team-links a {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 3px 8px;
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .team-links a:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Faculty card is slightly larger / highlighted */
+    .team-card.faculty {
+      border-color: #c8c0b0;
+      background: #fdfbf7;
+    }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+    .paper-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 2px solid var(--accent);
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .paper-link:hover { background: var(--accent); color: #fff; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Results</a>
+  <a href="background.html">Background</a>
+  <a href="methods.html">Methods</a>
+  <a href="team.html" class="active">The Team</a>
+</nav>
+
+<main>
+  <div class="page-label">The Team</div>
+  <h1>Who we are</h1>
+
+  <div class="top-section">
+    <div class="hci-logo">
+      <!-- Replace with actual HCI logo: assets/HCI_Logo_Workmark_official.png -->
+      <img src="assets/HCI_Logo_Workmark_official.png" alt="HCI Lab – Santa Clara University"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+      <div class="logo-placeholder" style="display:none;">HCI Lab · Santa Clara University</div>
+    </div>
+    <div class="acknowledgment">
+      This work was supported by the Stitt Fellowship Program at the Human-Computer Interaction Lab at Santa Clara University and the Faculty Hackworth Grant from the Markkula Center for Applied Ethics at Santa Clara University.
+    </div>
+  </div>
+
+  <!-- Faculty -->
+  <div class="team-section-label">Faculty</div>
+  <div class="team-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 480px; margin-bottom: 40px;">
+
+    <div class="team-card faculty">
+      <!-- Add photo: assets/pfp-kai.jpg pulled from LinkedIn -->
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Kai Lukoff</div>
+        <div class="team-role">Faculty Advisor</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/kailukoff/" target="_blank">LinkedIn</a>
+          <a href="mailto:klukoff@scu.edu">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-card faculty">
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">David C. Anastasiu</div>
+        <div class="team-role">Faculty Advisor</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/david-anastasiu/" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Researchers -->
+  <div class="team-section-label">Researchers</div>
+  <div class="team-grid">
+
+    <div class="team-card">
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Ilona van der Linden</div>
+        <div class="team-role">Lead Researcher<br/>M.S. Computer Science</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/ilona-van-der-linden/" target="_blank">LinkedIn</a>
+          <a href="mailto:lonavdlin@gmail.com">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Sahana Kumar</div>
+        <div class="team-role">Student Researcher</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/sahana-kumar-scu/" target="_blank">LinkedIn</a>
+          <a href="mailto:skumar9@scu.edu">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Arnav Dixit</div>
+        <div class="team-role">Student Researcher</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/arnav-dixit-scu/" target="_blank">LinkedIn</a>
+          <a href="mailto:adixit3@scu.edu">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Aadi Sudan</div>
+        <div class="team-role">Student Researcher</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/aadi-sudan/" target="_blank">LinkedIn</a>
+          <a href="mailto:asudan@scu.edu">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Smruthi Danda</div>
+        <div class="team-role">Student Researcher</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/smruthi-danda/" target="_blank">LinkedIn</a>
+          <a href="mailto:sdanda@scu.edu">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Julianna Dietrich</div>
+        <div class="team-role">Student Researcher</div>
+        <div class="team-links">
+          <a href="https://www.linkedin.com/in/julianna-dietrich/" target="_blank">LinkedIn</a>
+          <a href="mailto:jdietrich@scu.edu">Email</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr />
+
+  <a href="https://arxiv.org/abs/2510.21011" target="_blank" class="paper-link">
+    📄 Read the full paper on arXiv →
+  </a>
+
+</main>
+
+</body>
+</html>
