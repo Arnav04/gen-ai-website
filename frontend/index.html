@@ -15,20 +15,16 @@
                 <div class="loading">Loading occupations...</div>
             </div>
         </div>
-
         <div class="main-content">
             <h1 class="occupation-title" id="occupationTitle">Select an Occupation</h1>
             <p class="model-info" id="modelInfo">Choose an occupation from the sidebar to begin</p>
-
             <div class="chart-container" id="chartContainer">
                 <div class="loading">Select an occupation to view charts</div>
             </div>
-
             <p class="chart-description">
                 The charts show the percentage-point differences from the National Statistics: negative values indicate 
                 underrepresentation and positive values indicate overrepresentation, with the dashed vertical line marking parity (0).
             </p>
-
             <div class="model-selector">
                 <button class="model-btn chatgpt-btn" data-model="openai">
                     <span class="icon">💬</span> ChatGPT
@@ -46,16 +42,17 @@
                     <span class="icon">★</span> All
                 </button>
             </div>
+            <p class="arxiv-link">
+                📄 <a href="https://arxiv.org/abs/2510.21011" target="_blank">Read the full paper on arXiv →</a>
+            </p>
         </div>
-
         <div class="right-sidebar">
-            <div class="sidebar-item active">Results</div>
-            <div class="sidebar-item">Background</div>
-            <div class="sidebar-item">Methods</div>
-            <div class="sidebar-item">The Team</div>
+            <a class="sidebar-item active" href="index.html">Results</a>
+            <a class="sidebar-item" href="background.html">Background</a>
+            <a class="sidebar-item" href="methods.html">Methods</a>
+            <a class="sidebar-item" href="team.html">The Team</a>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
