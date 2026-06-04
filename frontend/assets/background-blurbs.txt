@@ -1,0 +1,23 @@
+COMPAS Machine Bias, 2016
+ProPublica
+Criminal recidivism algorithms flagged Black defendants as future criminals twice as often their white counterparts.
+
+Amazon Hiring, 2018
+Reuters
+An internal AI recruiting tool was scrapped after it was found to systematically downgrade resumes from women.
+
+GenderShades, 2018
+Dr. Joy Buolamwini
+Facial recognition programs consistently failed when used on marginalized groups. 
+
+GPT-3 Occupational Bias, 2021
+Lucy & Bamman
+GPT-3 consistently portrayed women in relational or appearance-based terms while depicting men as authoritative and leadership-oriented.
+
+Text-To-Image Surgeons, 2023
+Ali et al.
+Leading text-to-image generators overwhelmingly depicted surgeons as white men, diverging sharply from actual workforce demographics. 
+
+New York Times, 2024
+Nick Grant
+A diversity-oriented update caused Gemini to generate historically implausible images of people of color as Nazi soldiers.

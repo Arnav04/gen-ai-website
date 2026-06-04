@@ -1,0 +1,189 @@
+
+<style>
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary); margin: 0 0 8px; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .card-sm { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+  .tag { display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .tag-blue { background: #E6F1FB; color: #0C447C; }
+  .tag-teal { background: #E1F5EE; color: #085041; }
+  .tag-purple { background: #EEEDFE; color: #3C3489; }
+  .tag-coral { background: #FAECE7; color: #712B13; }
+  .tag-amber { background: #FAEEDA; color: #633806; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+  .rq-num { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); margin: 0; }
+  .rq-text { font-size: 14px; color: var(--color-text-primary); margin: 2px 0 0; line-height: 1.5; }
+  .step-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--color-background-info); color: var(--color-text-info); font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-text { font-size: 14px; color: var(--color-text-primary); line-height: 1.5; }
+  .step-detail { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.4; }
+  .bias-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .bias-row:last-child { border-bottom: none; }
+  .bias-icon { width: 32px; height: 32px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .bias-label { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 0; }
+  .bias-desc { font-size: 13px; color: var(--color-text-secondary); margin: 1px 0 0; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .accordion-btn { background: none; border: none; width: 100%; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 0; }
+  .accordion-body { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+  .accordion-body.open { max-height: 600px; }
+  .chevron { transition: transform 0.3s; font-size: 16px; color: var(--color-text-secondary); }
+  .chevron.open { transform: rotate(180deg); }
+  h2.section-heading { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .section-sub { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 1rem; line-height: 1.5; }
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Research background and methods explainer for LLM occupational persona audit study</h2>
+
+<div style="padding: 1.5rem 0;">
+
+  <p class="section-label">Background</p>
+  <h2 class="section-heading">Why does this matter?</h2>
+  <p class="section-sub">When AI generates a "software engineer" or "housekeeper," who does it picture? These defaults shape how people see professional roles — and who feels like they belong in them.</p>
+
+  <div class="grid-2" style="margin-bottom: 1.5rem;">
+    <div class="card-sm">
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0 0 4px;">Prior research shows</p>
+      <p style="font-size: 14px; color: var(--color-text-primary); margin: 0; line-height: 1.5;">Image search results for jobs like "programmer" or "engineer" have long underrepresented women and minorities — shaping who imagines those careers as attainable.</p>
+    </div>
+    <div class="card-sm">
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0 0 4px;">The shift to text generation</p>
+      <p style="font-size: 14px; color: var(--color-text-primary); margin: 0; line-height: 1.5;">LLMs are now used to generate personas for product design, hiring simulations, and synthetic datasets — making their demographic defaults matter more than ever.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <p style="font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin: 0 0 10px;">Five ways AI can represent (or misrepresent) a group</p>
+    <div class="bias-row">
+      <div class="bias-icon" style="background:#E1F5EE;"><i class="ti ti-equal" style="color:#0F6E56;" aria-hidden="true"></i></div>
+      <div><p class="bias-label">Reality</p><p class="bias-desc">Outputs mirror real-world workforce demographics.</p></div>
+    </div>
+    <div class="bias-row">
+      <div class="bias-icon" style="background:#FAEEDA;"><i class="ti ti-arrow-up-right" style="color:#854F0B;" aria-hidden="true"></i></div>
+      <div><p class="bias-label">Stereotype exaggeration</p><p class="bias-desc">Amplifies existing skews — male-dominated fields become even more male.</p></div>
+    </div>
+    <div class="bias-row">
+      <div class="bias-icon" style="background:#E6F1FB;"><i class="ti ti-arrows-minimize" style="color:#185FA5;" aria-hidden="true"></i></div>
+      <div><p class="bias-label">Stereotype reduction</p><p class="bias-desc">Dampens extremes to look balanced — but can obscure real disparities.</p></div>
+    </div>
+    <div class="bias-row">
+      <div class="bias-icon" style="background:#EEEDFE;"><i class="ti ti-trending-up" style="color:#534AB7;" aria-hidden="true"></i></div>
+      <div><p class="bias-label">Overrepresentation</p><p class="bias-desc">A group appears more often than their real-world share, across all jobs.</p></div>
+    </div>
+    <div class="bias-row">
+      <div class="bias-icon" style="background:#FAECE7;"><i class="ti ti-trending-down" style="color:#993C1D;" aria-hidden="true"></i></div>
+      <div><p class="bias-label">Underrepresentation</p><p class="bias-desc">A group is systematically suppressed across roles, regardless of reality.</p></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <p class="section-label">Methods</p>
+  <h2 class="section-heading">How we ran the study</h2>
+  <p class="section-sub">We generated over 1.5 million AI personas, then compared their demographics to U.S. labor force data.</p>
+
+  <div style="margin-bottom: 1rem;">
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div>
+        <p class="step-text">Chose 41 occupations and a real-world benchmark</p>
+        <p class="step-detail">Occupations were selected from prior audit studies and matched to U.S. Bureau of Labor Statistics (BLS) 2023 workforce data — the ground truth for what the actual workforce looks like by race and gender.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div>
+        <p class="step-text">Prompted four major LLMs with the same request</p>
+        <p class="step-detail">"Generate a profile for: [job title] in the United States." Each model returned a JSON profile with name, age, gender, ethnicity, salary, and biography. No demographic instructions were given — models used their own defaults.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div>
+        <p class="step-text">Generated 10,000 personas per occupation per model</p>
+        <p class="step-detail">Each request was issued in a separate context window so models couldn't self-correct for balance. DeepSeek was limited to 1,000 per occupation due to API constraints.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div>
+        <p class="step-text">Measured how far each model's outputs deviated from BLS</p>
+        <p class="step-detail">Used logistic regression to separate two types of distortion: a uniform shift (is a group always over- or underrepresented?) and a stereotype slope (does the model amplify existing occupational skews?).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom: 1.5rem;">
+    <div class="card-sm">
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0 0 6px;">Models audited</p>
+      <div style="display: flex; flex-wrap: gap; gap: 6px;">
+        <span class="tag tag-blue">GPT-4</span>
+        <span class="tag tag-teal">Gemini 2.5</span>
+        <span class="tag tag-purple">DeepSeek V3.1</span>
+        <span class="tag tag-coral">Mistral Medium</span>
+      </div>
+      <p style="font-size: 12px; color: var(--color-text-secondary); margin: 8px 0 0; line-height: 1.4;">Two U.S.-based, one Chinese, one European — chosen to test whether institutional origin shapes bias.</p>
+    </div>
+    <div class="card-sm">
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0 0 6px;">What we measured</p>
+      <p style="font-size: 14px; color: var(--color-text-primary); margin: 0; line-height: 1.5;">Gender (binary) and race/ethnicity (White, Black, Hispanic, Asian) — constrained by what BLS reports, not by what identities matter.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <p class="section-label">Research questions</p>
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <div class="card-sm">
+      <p class="rq-num">RQ1</p>
+      <p class="rq-text">How do AI-generated personas systematically differ from real U.S. workforce demographics?</p>
+    </div>
+    <div class="card-sm">
+      <p class="rq-num">RQ2</p>
+      <p class="rq-text">Do models amplify existing occupational stereotypes, or dampen them?</p>
+    </div>
+    <div class="card-sm">
+      <p class="rq-num">RQ3</p>
+      <p class="rq-text">Do bias patterns differ across models from different countries and organizations — or are they shared?</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="card">
+    <button class="accordion-btn" onclick="toggleAccordion(this)" aria-expanded="false">
+      <span style="font-size: 14px; font-weight: 500; color: var(--color-text-primary);">Statistical details (for the curious)</span>
+      <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+    </button>
+    <div class="accordion-body">
+      <div style="padding-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <p style="font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px;">Shift vs. slope decomposition</p>
+          <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">The regression intercept (α) captures a group's average over/underrepresentation across all jobs. The slope (β) captures whether the model exaggerates or reduces existing skews — a slope above 1.0 means more stereotyping, below 1.0 means less.</p>
+        </div>
+        <div>
+          <p style="font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px;">Entropy analysis</p>
+          <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">Shannon entropy measures how spread-out a distribution is. A model generating only male nurses has zero entropy; the real workforce has high entropy. We compare model entropy to BLS entropy for each occupation.</p>
+        </div>
+        <div>
+          <p style="font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px;">Robustness checks</p>
+          <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">Three regression specifications were used: raw, trimmed (dropping top/bottom 5% of occupations), and robust regression (downweighting high-leverage outliers). Robust regression is the primary specification. All tests use false discovery rate correction.</p>
+        </div>
+        <div>
+          <p style="font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px;">Limitation: BLS as baseline</p>
+          <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">BLS data is the comparison point, not a fairness ideal. It reflects real-world inequities and excludes non-binary identities. Deviating from BLS doesn't automatically mean harm — and matching BLS doesn't mean fairness.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleAccordion(btn) {
+  const body = btn.nextElementSibling;
+  const chevron = btn.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+</script>
